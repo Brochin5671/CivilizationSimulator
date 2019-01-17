@@ -15,11 +15,11 @@ public abstract class Lifeform {
         //creates random genes for lifeform
         for(int i=0;i<GENE_SIZE;i++)
             genes[i]=(int)(Math.random()*10);
-        //fitnessPoints=train(Population.getTargetGenes());
-        //id=nextid++;
+        //evaluate fitness points
+        fitnessPoints=train(CivilizationSimulator.getTargetGenes());
     }
     //child of original population's lifeform constructor, sends in parent's genes
-    public Lifeform(int genesCopy[]){
+    public Lifeform(int[] genesCopy){
         //creates a copy (tempGenes) of genesCopy
         int[] tempGenes=new int[GENE_SIZE];
         for(int i=0;i<GENE_SIZE;i++)
@@ -27,12 +27,14 @@ public abstract class Lifeform {
         genes=tempGenes;
         //mutates genes
         mutateGenes();
-        //fitnessPoints=train(Population.getTargetGenes());
-        //id=nextid++;
+        //evaluate fitness points
+        fitnessPoints=train(CivilizationSimulator.getTargetGenes());
     }
     
     //returns name of lifeform
     public abstract String getName();
+    //used when a game is reset so ids are back at 1
+    public abstract void resetId();
     //returns genes of lifeform
     public final int[] getGenes() {
         return genes;
@@ -42,7 +44,7 @@ public abstract class Lifeform {
         return id;
     }
     //returns lifeform's fitness points
-    public int getFitness() {
+    public final int getFitness() {
         return fitnessPoints;
     }
     //evaluates lifeform's fitness points by comparing to targetGenes
@@ -60,6 +62,6 @@ public abstract class Lifeform {
     //prints object's information
     @Override
     public String toString() {
-        return "DNA: "+Arrays.toString(genes)+" | Fitness Points: "+fitnessPoints;
+        return "#"+id+" | DNA: "+Arrays.toString(genes)+" | Fitness Points: "+fitnessPoints;
     }
 }
