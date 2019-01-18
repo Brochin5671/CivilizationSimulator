@@ -2,7 +2,7 @@ package CivilizationSimulator;
 
 import java.util.Arrays;
 
-public abstract class Lifeform {
+public abstract class Lifeform implements Comparable<Lifeform>{
     //variables
     protected static final int GENE_SIZE=10; //size of a lifeform's genes
     protected double MUTATION_RATE; //chance of genes mutating
@@ -43,6 +43,10 @@ public abstract class Lifeform {
     public final int getId() {
         return id;
     }
+    
+    public int compareTo(Lifeform lf){
+        return this.fitnessPoints - lf.fitnessPoints;
+    }
     //returns lifeform's fitness points
     public final int getFitness() {
         return fitnessPoints;
@@ -62,6 +66,6 @@ public abstract class Lifeform {
     //prints object's information
     @Override
     public String toString() {
-        return " #"+id+" | DNA: "+Arrays.toString(genes)+" | Fitness Points: "+fitnessPoints;
+        return " #"+id+" | Fitness Points: "+fitnessPoints+" | DNA: "+Arrays.toString(genes);
     }
 }

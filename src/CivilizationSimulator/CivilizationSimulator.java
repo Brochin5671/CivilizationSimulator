@@ -1,14 +1,29 @@
 package CivilizationSimulator;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
 public class CivilizationSimulator extends javax.swing.JFrame {
     //variables
     private static int[] targetGenes=new int[10];
+    private final static int POPULATION_SIZE=10;
+    DefaultListModel humanlistmodel,monsterlistmodel,alienlistmodel;
+    ArrayList<Lifeform> hlist = new ArrayList<Lifeform>();
+    ArrayList<Lifeform> mlist = new ArrayList<Lifeform>();
+    ArrayList<Lifeform> alist = new ArrayList<Lifeform>();
     
     public CivilizationSimulator() {
         initComponents();
+        //setup lifeform lists and models
+        humanlistmodel=new DefaultListModel();
+        listhumans.setModel(humanlistmodel);
+        monsterlistmodel=new DefaultListModel();
+        listmonsters.setModel(monsterlistmodel);
+        alienlistmodel=new DefaultListModel();
+        listaliens.setModel(alienlistmodel);
     }
 
     //creates target genes
@@ -48,6 +63,7 @@ public class CivilizationSimulator extends javax.swing.JFrame {
         setAutoRequestFocus(false);
         setResizable(false);
 
+        btnstart.setFont(new java.awt.Font("Segoe UI Semilight", 1, 12)); // NOI18N
         btnstart.setText("Start");
         btnstart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -58,11 +74,6 @@ public class CivilizationSimulator extends javax.swing.JFrame {
         listmonsters.setBackground(new java.awt.Color(0, 153, 255));
         listmonsters.setFont(new java.awt.Font("Segoe UI Symbol", 1, 11)); // NOI18N
         listmonsters.setForeground(new java.awt.Color(255, 255, 255));
-        listmonsters.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane1.setViewportView(listmonsters);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Symbol", 1, 18)); // NOI18N
@@ -74,18 +85,14 @@ public class CivilizationSimulator extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Segoe UI Symbol", 1, 18)); // NOI18N
         jLabel3.setText("Aliens");
 
-        listhumans.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        listhumans.setBackground(new java.awt.Color(0, 153, 255));
+        listhumans.setFont(new java.awt.Font("Segoe UI Symbol", 1, 11)); // NOI18N
+        listhumans.setForeground(new java.awt.Color(255, 255, 255));
         jScrollPane2.setViewportView(listhumans);
 
-        listaliens.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        listaliens.setBackground(new java.awt.Color(0, 153, 255));
+        listaliens.setFont(new java.awt.Font("Segoe UI Symbol", 1, 11)); // NOI18N
+        listaliens.setForeground(new java.awt.Color(255, 255, 255));
         jScrollPane3.setViewportView(listaliens);
 
         jButton1.setText("Attack");
@@ -111,6 +118,7 @@ public class CivilizationSimulator extends javax.swing.JFrame {
             }
         });
 
+        btnhelp.setFont(new java.awt.Font("Segoe UI Semilight", 1, 12)); // NOI18N
         btnhelp.setText("Help");
         btnhelp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -118,6 +126,7 @@ public class CivilizationSimulator extends javax.swing.JFrame {
             }
         });
 
+        btnexit.setFont(new java.awt.Font("Segoe UI Semilight", 1, 12)); // NOI18N
         btnexit.setText("Exit");
         btnexit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -135,49 +144,50 @@ public class CivilizationSimulator extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(77, 77, 77)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnexit)
-                                .addGap(226, 226, 226)
-                                .addComponent(btnstart))
-                            .addGroup(layout.createSequentialGroup()
+                        .addGap(77, 77, 77)
+                        .addComponent(btnexit)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnstart)
+                        .addGap(108, 108, 108))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(74, 74, 74)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(92, 92, 92)
                                 .addComponent(jLabel1)
-                                .addGap(164, 164, 164)
-                                .addComponent(jLabel2)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 165, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(91, 91, 91))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(btnhelp)
-                                .addGap(70, 70, 70))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addContainerGap())))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(55, 55, 55)
-                .addComponent(btnskip1)
-                .addGap(137, 137, 137)
-                .addComponent(btnskip5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnskip10)
-                .addGap(47, 47, 47))
+                                .addGap(259, 259, 259)
+                                .addComponent(jLabel2))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(89, 89, 89)
+                                .addComponent(jButton1)
+                                .addGap(180, 180, 180)
+                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(105, 105, 105))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnhelp)
+                        .addGap(92, 92, 92))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(btnskip1)
+                .addGap(18, 18, 18)
+                .addComponent(btnskip5)
+                .addGap(18, 18, 18)
+                .addComponent(btnskip10)
+                .addGap(262, 262, 262))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -197,13 +207,13 @@ public class CivilizationSimulator extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton1)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE))
+                .addGap(48, 48, 48)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnskip1)
+                    .addComponent(btnskip10)
                     .addComponent(btnskip5)
-                    .addComponent(btnskip10))
-                .addGap(36, 36, 36)
+                    .addComponent(btnskip1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnstart)
                     .addComponent(btnhelp)
@@ -217,12 +227,26 @@ public class CivilizationSimulator extends javax.swing.JFrame {
     private void btnstartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnstartActionPerformed
         //create target genes and initial populations
         initializeTargetGenes();
-        txtactivity.append("Simulation Started.\n");
-        //humans
-        Lifeform l=new Human();
-        System.out.println(l);
-        //monsters
-        //aliens
+        txtactivity.setText("Simulation Started.\n---Generation 1---\n");
+        //create lifeforms
+        for(int i=0;i<POPULATION_SIZE;i++){
+            hlist.add(new Human());
+            mlist.add(new Monster());
+            alist.add(new Alien());
+        }
+        //sort lists by fitness points
+        Collections.sort(hlist, (Lifeform lf1, Lifeform lf2) -> lf1.compareTo(lf2));
+        Collections.sort(mlist, (Lifeform lf1, Lifeform lf2) -> lf1.compareTo(lf2));
+        Collections.sort(alist, (Lifeform lf1, Lifeform lf2) -> lf1.compareTo(lf2));
+        //add to lists
+        for(Lifeform lf : hlist)
+            humanlistmodel.addElement(lf);
+        for(Lifeform lf : mlist)
+            monsterlistmodel.addElement(lf);
+        for(Lifeform lf : alist)
+            alienlistmodel.addElement(lf);
+        //disable button
+        btnstart.setEnabled(false);
     }//GEN-LAST:event_btnstartActionPerformed
     //ends program
     private void btnexitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnexitActionPerformed
