@@ -237,26 +237,41 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Skip 1 Generation"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnskip1ActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnskip5">
       <Properties>
         <Property name="text" type="java.lang.String" value="Skip 5 Generations"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnskip5ActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnskip10">
       <Properties>
         <Property name="text" type="java.lang.String" value="Skip 10 Generations"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnskip10ActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnhelp">
       <Properties>
         <Property name="text" type="java.lang.String" value="Help"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnhelpActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnexit">
       <Properties>
         <Property name="text" type="java.lang.String" value="Exit"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnexitActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

@@ -1,6 +1,7 @@
 package CivilizationSimulator;
 
 import java.util.Arrays;
+import javax.swing.JOptionPane;
 
 public class CivilizationSimulator extends javax.swing.JFrame {
     //variables
@@ -88,14 +89,39 @@ public class CivilizationSimulator extends javax.swing.JFrame {
         jButton1.setText("Attack");
 
         btnskip1.setText("Skip 1 Generation");
+        btnskip1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnskip1ActionPerformed(evt);
+            }
+        });
 
         btnskip5.setText("Skip 5 Generations");
+        btnskip5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnskip5ActionPerformed(evt);
+            }
+        });
 
         btnskip10.setText("Skip 10 Generations");
+        btnskip10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnskip10ActionPerformed(evt);
+            }
+        });
 
         btnhelp.setText("Help");
+        btnhelp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnhelpActionPerformed(evt);
+            }
+        });
 
         btnexit.setText("Exit");
+        btnexit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnexitActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -180,6 +206,30 @@ public class CivilizationSimulator extends javax.swing.JFrame {
         //monsters
         //aliens
     }//GEN-LAST:event_btnstartActionPerformed
+    //ends program
+    private void btnexitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnexitActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_btnexitActionPerformed
+    //info and help on playing the simulation
+    private void btnhelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnhelpActionPerformed
+        JOptionPane.showMessageDialog(this,"The humans are racing towards having the best genes on the planet!\nBut, the aliens and monsters want to beat them to it.");
+        JOptionPane.showMessageDialog(this,"Every generation, natural selection occurs and replaces the bad half\nof each population with the best half's children.");
+        JOptionPane.showMessageDialog(this,"You can use the skip buttons to skip a generation, 5 generations,\nor 10 if you want to speed things up.");
+        JOptionPane.showMessageDialog(this,"You can stagnate your enemies progress with your attack.\nBut watch out, they can attack you too!");
+        JOptionPane.showMessageDialog(this,"Achieve the target gene and you win.\nDo you have what it takes to lead your population to victory?");
+    }//GEN-LAST:event_btnhelpActionPerformed
+    //one generation goes by
+    private void btnskip1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnskip1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnskip1ActionPerformed
+    //five generations go by
+    private void btnskip5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnskip5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnskip5ActionPerformed
+    //ten generations go by
+    private void btnskip10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnskip10ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnskip10ActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

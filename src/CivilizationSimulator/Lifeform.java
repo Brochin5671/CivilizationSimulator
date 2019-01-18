@@ -62,6 +62,6 @@ public abstract class Lifeform {
     //prints object's information
     @Override
     public String toString() {
-        return "#"+id+" | DNA: "+Arrays.toString(genes)+" | Fitness Points: "+fitnessPoints;
+        return " #"+id+" | DNA: "+Arrays.toString(genes)+" | Fitness Points: "+fitnessPoints;
     }
 }

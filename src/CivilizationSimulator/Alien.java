@@ -24,4 +24,11 @@ public class Alien extends Lifeform {
     public void resetId() {
         nextid=1;
     }
+    //prints object's information
+    @Override
+    public String toString(){
+        String str=getName();
+        str+=super.toString();
+        return str;
+    }
 }
