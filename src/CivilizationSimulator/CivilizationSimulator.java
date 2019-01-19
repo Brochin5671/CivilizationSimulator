@@ -9,7 +9,10 @@ import javax.swing.JOptionPane;
 public class CivilizationSimulator extends javax.swing.JFrame {
     //variables
     private static int[] targetGenes=new int[10];
-    private final static int POPULATION_SIZE=10;
+    private int POPULATION_HSIZE=10,POPULATION_MSIZE=10,POPULATION_ASIZE=10; //population sizes of all lifeforms
+    private int generationNum;
+    private boolean gameOver=false;
+    //lists
     DefaultListModel humanlistmodel,monsterlistmodel,alienlistmodel;
     ArrayList<Lifeform> hlist = new ArrayList<Lifeform>();
     ArrayList<Lifeform> mlist = new ArrayList<Lifeform>();
@@ -24,10 +27,14 @@ public class CivilizationSimulator extends javax.swing.JFrame {
         listmonsters.setModel(monsterlistmodel);
         alienlistmodel=new DefaultListModel();
         listaliens.setModel(alienlistmodel);
+        //simulation hasn't started so disable buttons
+        btnskip1.setEnabled(false);
+        btnskip5.setEnabled(false);
+        btnskip10.setEnabled(false);
     }
 
     //creates target genes
-    public static void initializeTargetGenes(){
+    public void initializeTargetGenes(){
         for(int i=0;i<10;i++)
             targetGenes[i]=(int)(Math.random()*10);
         System.out.println("Target Genes: "+Arrays.toString(targetGenes));
@@ -36,6 +43,68 @@ public class CivilizationSimulator extends javax.swing.JFrame {
     public static int[] getTargetGenes(){
         return targetGenes;
     }
+    //creates new generation(s) of lifeforms
+    public void createNewGeneration(int generations){
+        while(generations!=0){
+            /*for each lifeform, runs through half the population (list sorted worst to best), removing the worst half
+            and replacing it with the best half's children who recieve their genes from the best half.
+            This works by starting at the end of the list and taking in account for the decreasing size of the list and moving backwards.
+            When the genes are sent in, the child mutates the genes. All three lists are sorted and added to each model*/
+            //humans
+            for(int i=0;i<POPULATION_HSIZE/2;i++){
+                hlist.remove(i);
+                hlist.add(i,new Human(hlist.get(POPULATION_HSIZE-2-i).getGenes()));
+            }
+            humanlistmodel.clear();
+            Collections.sort(hlist, (Lifeform lf1, Lifeform lf2) -> lf1.compareTo(lf2));
+            for(Lifeform lf : hlist)
+                humanlistmodel.addElement(lf);
+            //monsters
+            for(int i=0;i<POPULATION_MSIZE/2;i++){
+                mlist.remove(i);
+                mlist.add(i,new Monster(mlist.get(POPULATION_MSIZE-2-i).getGenes()));
+            }
+            monsterlistmodel.clear();
+            Collections.sort(mlist, (Lifeform lf1, Lifeform lf2) -> lf1.compareTo(lf2));
+            for(Lifeform lf : mlist)
+                monsterlistmodel.addElement(lf);
+            //aliens
+            for(int i=0;i<POPULATION_ASIZE/2;i++){
+                alist.remove(i);
+                alist.add(i,new Alien(alist.get(POPULATION_ASIZE-2-i).getGenes()));
+            }
+            alienlistmodel.clear();
+            Collections.sort(alist, (Lifeform lf1, Lifeform lf2) -> lf1.compareTo(lf2));
+            for(Lifeform lf : alist)
+                alienlistmodel.addElement(lf);
+            //decreases generations by one so when generations reaches zero it can stop creating new generations
+            //this is because of how many generations were requested to be skipped by the user
+            generations--;
+            //checks if there is a winner, and resets simulation
+            if(isWinner()){
+                Human.resetId();
+                Monster.resetId();
+                Alien.resetId();
+                //btnstart.setText("Restart");
+                btnstart.setEnabled(true);
+                btnskip1.setEnabled(false);
+                btnskip5.setEnabled(false);
+                btnskip10.setEnabled(false);
+                break;
+            }
+        }
+    }
+    //checks each list to see if 10 fitness points (the maximum) was reached so there is a winner and the simulation can end
+    private boolean isWinner(){
+        for(int i=0;i<POPULATION_HSIZE;i++)
+            if(hlist.get(i).getFitness()==10) return true;
+        for(int i=0;i<POPULATION_MSIZE;i++)
+            if(mlist.get(i).getFitness()==10) return true;
+        for(int i=0;i<POPULATION_ASIZE;i++)
+            if(alist.get(i).getFitness()==10) return true;
+        return false;
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -58,9 +127,12 @@ public class CivilizationSimulator extends javax.swing.JFrame {
         btnexit = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         txtactivity = new javax.swing.JTextArea();
+        lbltargetgenes = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAutoRequestFocus(false);
+        setMaximumSize(new java.awt.Dimension(939, 600));
+        setMinimumSize(new java.awt.Dimension(939, 600));
         setResizable(false);
 
         btnstart.setFont(new java.awt.Font("Segoe UI Semilight", 1, 12)); // NOI18N
@@ -139,36 +211,31 @@ public class CivilizationSimulator extends javax.swing.JFrame {
         txtactivity.setRows(5);
         jScrollPane4.setViewportView(txtactivity);
 
+        lbltargetgenes.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
+        lbltargetgenes.setText("Target Genes: [?,  ?,  ?,  ?,  ?,  ?,  ?,  ?,  ?,  ?]");
+        lbltargetgenes.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(77, 77, 77)
-                        .addComponent(btnexit)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnstart)
-                        .addGap(108, 108, 108))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(74, 74, 74)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGap(92, 92, 92)
-                                .addComponent(jLabel1)
-                                .addGap(259, 259, 259)
-                                .addComponent(jLabel2))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGap(89, 89, 89)
-                                .addComponent(jButton1)
-                                .addGap(180, 180, 180)
-                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(74, 74, 74)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(92, 92, 92)
+                        .addComponent(jLabel1)
+                        .addGap(259, 259, 259)
+                        .addComponent(jLabel2))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(89, 89, 89)
+                        .addComponent(jButton1)
+                        .addGap(180, 180, 180)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -180,14 +247,26 @@ public class CivilizationSimulator extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnhelp)
                         .addGap(92, 92, 92))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(360, 360, 360)
+                .addComponent(lbltargetgenes)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnskip1)
-                .addGap(18, 18, 18)
-                .addComponent(btnskip5)
-                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(77, 77, 77)
+                        .addComponent(btnexit)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnstart)
+                        .addGap(39, 39, 39))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnskip1)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnskip5)
+                        .addGap(18, 18, 18)))
                 .addComponent(btnskip10)
-                .addGap(262, 262, 262))
+                .addGap(268, 268, 268))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -207,13 +286,15 @@ public class CivilizationSimulator extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton1)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE))
-                .addGap(48, 48, 48)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnskip10)
-                    .addComponent(btnskip5)
-                    .addComponent(btnskip1))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbltargetgenes)
+                .addGap(19, 19, 19)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnskip1)
+                    .addComponent(btnskip5)
+                    .addComponent(btnskip10))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnstart)
                     .addComponent(btnhelp)
@@ -225,11 +306,19 @@ public class CivilizationSimulator extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     //begins simulation
     private void btnstartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnstartActionPerformed
+        hlist.clear();
+        mlist.clear();
+        alist.clear();
+        humanlistmodel.clear();
+        monsterlistmodel.clear();
+        alienlistmodel.clear();
+        generationNum=1;
         //create target genes and initial populations
         initializeTargetGenes();
-        txtactivity.setText("Simulation Started.\n---Generation 1---\n");
+        //lbltargetgenes.setText("Target Genes: "+Arrays.toString(getTargetGenes()));
+        txtactivity.setText("---Generation 1---\n");
         //create lifeforms
-        for(int i=0;i<POPULATION_SIZE;i++){
+        for(int i=0;i<POPULATION_HSIZE;i++){ //...HSIZE starts as the official default size (10)
             hlist.add(new Human());
             mlist.add(new Monster());
             alist.add(new Alien());
@@ -245,8 +334,11 @@ public class CivilizationSimulator extends javax.swing.JFrame {
             monsterlistmodel.addElement(lf);
         for(Lifeform lf : alist)
             alienlistmodel.addElement(lf);
-        //disable button
+        //enable and disable buttons
         btnstart.setEnabled(false);
+        btnskip1.setEnabled(true);
+        btnskip5.setEnabled(true);
+        btnskip10.setEnabled(true);
     }//GEN-LAST:event_btnstartActionPerformed
     //ends program
     private void btnexitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnexitActionPerformed
@@ -262,15 +354,24 @@ public class CivilizationSimulator extends javax.swing.JFrame {
     }//GEN-LAST:event_btnhelpActionPerformed
     //one generation goes by
     private void btnskip1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnskip1ActionPerformed
-        // TODO add your handling code here:
+        createNewGeneration(1);
+        //update game log
+        generationNum++;
+        txtactivity.setText("---Generation "+generationNum+"---\n");
     }//GEN-LAST:event_btnskip1ActionPerformed
     //five generations go by
     private void btnskip5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnskip5ActionPerformed
-        // TODO add your handling code here:
+        createNewGeneration(5);
+        //update game log
+        generationNum+=5;
+        txtactivity.setText("---Generation "+generationNum+"---\n");
     }//GEN-LAST:event_btnskip5ActionPerformed
     //ten generations go by
     private void btnskip10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnskip10ActionPerformed
-        // TODO add your handling code here:
+        createNewGeneration(10);
+        //update game log
+        generationNum+=10;
+        txtactivity.setText("---Generation "+generationNum+"---\n");
     }//GEN-LAST:event_btnskip10ActionPerformed
 
     public static void main(String args[]) {
@@ -320,6 +421,7 @@ public class CivilizationSimulator extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JLabel lbltargetgenes;
     private javax.swing.JList<String> listaliens;
     private javax.swing.JList<String> listhumans;
     private javax.swing.JList<String> listmonsters;

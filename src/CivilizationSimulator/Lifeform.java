@@ -5,7 +5,7 @@ import java.util.Arrays;
 public abstract class Lifeform implements Comparable<Lifeform>{
     //variables
     protected static final int GENE_SIZE=10; //size of a lifeform's genes
-    protected double MUTATION_RATE; //chance of genes mutating
+    protected double MUTATION_RATE=0.3; //chance of genes mutating
     protected int[] genes=new int[GENE_SIZE]; //lifeform's genes
     protected int id,fitnessPoints; //lifeform's id and fitness points
     protected String name; //name of lifeform
@@ -33,8 +33,6 @@ public abstract class Lifeform implements Comparable<Lifeform>{
     
     //returns name of lifeform
     public abstract String getName();
-    //used when a game is reset so ids are back at 1
-    public abstract void resetId();
     //returns genes of lifeform
     public final int[] getGenes() {
         return genes;
@@ -43,7 +41,8 @@ public abstract class Lifeform implements Comparable<Lifeform>{
     public final int getId() {
         return id;
     }
-    
+    //to sort lifeforms in lists by points
+    @Override
     public int compareTo(Lifeform lf){
         return this.fitnessPoints - lf.fitnessPoints;
     }

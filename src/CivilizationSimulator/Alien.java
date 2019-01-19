@@ -19,9 +19,8 @@ public class Alien extends Lifeform {
     public String getName() {
         return "Alien";
     }
-    //resets ids
-    @Override
-    public void resetId() {
+    //resets ids when game is over
+    public static void resetId() {
         nextid=1;
     }
     //prints object's information
