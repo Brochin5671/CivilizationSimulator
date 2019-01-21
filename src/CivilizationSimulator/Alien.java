@@ -23,6 +23,11 @@ public class Alien extends Lifeform {
     public static void resetId() {
         nextid=1;
     }
+    //returns true if random number (0-99) is less than 4, increases population by 1
+    public static boolean increasePopulation(){
+        if((Math.random()*100)<4) return true;
+        return false;
+    }
     //prints object's information
     @Override
     public String toString(){

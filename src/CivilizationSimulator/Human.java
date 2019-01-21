@@ -23,6 +23,11 @@ public class Human extends Lifeform {
     public static void resetId() {
         nextid=1;
     }
+    //returns true if a number (0-99) is less than 5, increases population by number purged
+    public static boolean recover(){
+        if((Math.random()*100)<5) return true;
+        return false;
+    }
     //prints object's information
     @Override
     public String toString(){

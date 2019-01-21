@@ -23,6 +23,11 @@ public class Monster extends Lifeform {
     public static void resetId() {
         nextid=1;
     }
+    //returns true if random number (0-999) is less than 5, kills half of an enemy's population
+    public static boolean purge(){
+        if((Math.random()*1000)<5) return true;
+        return false;
+    }
     //prints object's information
     @Override
     public String toString(){

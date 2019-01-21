@@ -5,14 +5,14 @@ import java.util.Arrays;
 public abstract class Lifeform implements Comparable<Lifeform>{
     //variables
     protected static final int GENE_SIZE=10; //size of a lifeform's genes
-    protected double MUTATION_RATE=0.3; //chance of genes mutating
+    protected static double MUTATION_RATE=0.3; //chance of genes mutating
     protected int[] genes=new int[GENE_SIZE]; //lifeform's genes
     protected int id,fitnessPoints; //lifeform's id and fitness points
     protected String name; //name of lifeform
     
     //original population's lifeform constructor
     public Lifeform(){
-        //creates random genes for lifeform
+        //creates random genes for lifeform (this makes the initial population randomized)
         for(int i=0;i<GENE_SIZE;i++)
             genes[i]=(int)(Math.random()*10);
         //evaluate fitness points
@@ -50,6 +50,10 @@ public abstract class Lifeform implements Comparable<Lifeform>{
     public final int getFitness() {
         return fitnessPoints;
     }
+    //returns mutation rate
+    public static double getMutationRate(){
+        return MUTATION_RATE;
+    }
     //evaluates lifeform's fitness points by comparing to targetGenes
     private int train(int[] targetGenes){
         int fitness=0;
@@ -60,7 +64,7 @@ public abstract class Lifeform implements Comparable<Lifeform>{
     //mutates genes of lifeform
     private void mutateGenes(){
         for(int i=0;i<GENE_SIZE;i++)
-            if(Math.random()<MUTATION_RATE) genes[i]=(int)(Math.random()*10);
+            if(Math.random()<getMutationRate()) genes[i]=(int)(Math.random()*10);
     }
     //prints object's information
     @Override
