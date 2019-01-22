@@ -115,7 +115,7 @@ public class CivilizationSimulator extends javax.swing.JFrame {
     //updates simulation log
     public void updateLog(){
         generationNum++;
-        txtactivity.setText("---Generation "+generationNum+"---\n");
+        txtactivity.setText("----------------Generation "+generationNum+"----------------\n");
     }
     //checks if any of the populations attack or use an ability, or if a mutation event happens
     public void checkActions(){
@@ -249,6 +249,8 @@ public class CivilizationSimulator extends javax.swing.JFrame {
         txtactivity = new javax.swing.JTextArea();
         btnattackalien = new javax.swing.JButton();
         txttargetgenes = new javax.swing.JTextField();
+        txtalienattacks = new javax.swing.JTextField();
+        txtmonsterattacks = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAutoRequestFocus(false);
@@ -256,6 +258,7 @@ public class CivilizationSimulator extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(939, 600));
         setResizable(false);
 
+        btnstart.setBackground(new java.awt.Color(0, 255, 0));
         btnstart.setFont(new java.awt.Font("Segoe UI Semilight", 1, 12)); // NOI18N
         btnstart.setText("Start");
         btnstart.addActionListener(new java.awt.event.ActionListener() {
@@ -264,30 +267,43 @@ public class CivilizationSimulator extends javax.swing.JFrame {
             }
         });
 
-        listmonsters.setBackground(new java.awt.Color(0, 153, 255));
+        listmonsters.setBackground(new java.awt.Color(0, 153, 51));
         listmonsters.setFont(new java.awt.Font("Segoe UI Symbol", 1, 11)); // NOI18N
         listmonsters.setForeground(new java.awt.Color(255, 255, 255));
         jScrollPane1.setViewportView(listmonsters);
 
+        jLabel1.setBackground(new java.awt.Color(51, 204, 0));
         jLabel1.setFont(new java.awt.Font("Segoe UI Symbol", 1, 18)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Monsters");
+        jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jLabel1.setOpaque(true);
 
+        jLabel2.setBackground(new java.awt.Color(251, 243, 188));
         jLabel2.setFont(new java.awt.Font("Segoe UI Symbol", 1, 18)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Humans");
+        jLabel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jLabel2.setOpaque(true);
 
+        jLabel3.setBackground(new java.awt.Color(255, 0, 0));
         jLabel3.setFont(new java.awt.Font("Segoe UI Symbol", 1, 18)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Aliens");
+        jLabel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jLabel3.setOpaque(true);
 
-        listhumans.setBackground(new java.awt.Color(0, 153, 255));
+        listhumans.setBackground(new java.awt.Color(184, 184, 106));
         listhumans.setFont(new java.awt.Font("Segoe UI Symbol", 1, 11)); // NOI18N
         listhumans.setForeground(new java.awt.Color(255, 255, 255));
         jScrollPane2.setViewportView(listhumans);
 
-        listaliens.setBackground(new java.awt.Color(0, 153, 255));
+        listaliens.setBackground(new java.awt.Color(204, 0, 0));
         listaliens.setFont(new java.awt.Font("Segoe UI Symbol", 1, 11)); // NOI18N
         listaliens.setForeground(new java.awt.Color(255, 255, 255));
         jScrollPane3.setViewportView(listaliens);
 
+        btnattackmonster.setBackground(new java.awt.Color(255, 0, 0));
         btnattackmonster.setFont(new java.awt.Font("Segoe UI Semilight", 1, 12)); // NOI18N
         btnattackmonster.setText("Attack");
         btnattackmonster.addActionListener(new java.awt.event.ActionListener() {
@@ -296,6 +312,7 @@ public class CivilizationSimulator extends javax.swing.JFrame {
             }
         });
 
+        btnskip1.setBackground(new java.awt.Color(0, 204, 204));
         btnskip1.setFont(new java.awt.Font("Segoe UI Semilight", 1, 12)); // NOI18N
         btnskip1.setText("Skip 1 Generation");
         btnskip1.addActionListener(new java.awt.event.ActionListener() {
@@ -304,6 +321,7 @@ public class CivilizationSimulator extends javax.swing.JFrame {
             }
         });
 
+        btnskip5.setBackground(new java.awt.Color(0, 204, 204));
         btnskip5.setFont(new java.awt.Font("Segoe UI Semilight", 1, 12)); // NOI18N
         btnskip5.setText("Skip 5 Generations");
         btnskip5.addActionListener(new java.awt.event.ActionListener() {
@@ -312,6 +330,7 @@ public class CivilizationSimulator extends javax.swing.JFrame {
             }
         });
 
+        btnskip10.setBackground(new java.awt.Color(0, 204, 204));
         btnskip10.setFont(new java.awt.Font("Segoe UI Semilight", 1, 12)); // NOI18N
         btnskip10.setText("Skip 10 Generations");
         btnskip10.addActionListener(new java.awt.event.ActionListener() {
@@ -320,6 +339,7 @@ public class CivilizationSimulator extends javax.swing.JFrame {
             }
         });
 
+        btnhelp.setBackground(new java.awt.Color(255, 102, 0));
         btnhelp.setFont(new java.awt.Font("Segoe UI Semilight", 1, 12)); // NOI18N
         btnhelp.setText("Help");
         btnhelp.addActionListener(new java.awt.event.ActionListener() {
@@ -328,6 +348,7 @@ public class CivilizationSimulator extends javax.swing.JFrame {
             }
         });
 
+        btnexit.setBackground(new java.awt.Color(255, 102, 0));
         btnexit.setFont(new java.awt.Font("Segoe UI Semilight", 1, 12)); // NOI18N
         btnexit.setText("Exit");
         btnexit.addActionListener(new java.awt.event.ActionListener() {
@@ -337,10 +358,14 @@ public class CivilizationSimulator extends javax.swing.JFrame {
         });
 
         txtactivity.setEditable(false);
+        txtactivity.setBackground(new java.awt.Color(0, 153, 255));
         txtactivity.setColumns(20);
+        txtactivity.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
+        txtactivity.setForeground(new java.awt.Color(255, 255, 255));
         txtactivity.setRows(5);
         jScrollPane4.setViewportView(txtactivity);
 
+        btnattackalien.setBackground(new java.awt.Color(255, 0, 0));
         btnattackalien.setFont(new java.awt.Font("Segoe UI Semilight", 1, 12)); // NOI18N
         btnattackalien.setText("Attack");
         btnattackalien.addActionListener(new java.awt.event.ActionListener() {
@@ -350,8 +375,19 @@ public class CivilizationSimulator extends javax.swing.JFrame {
         });
 
         txttargetgenes.setEditable(false);
-        txttargetgenes.setFont(new java.awt.Font("Segoe UI Historic", 1, 11)); // NOI18N
-        txttargetgenes.setText("Target Genes: [?,  ?,  ?,  ?,  ?,  ?,  ?,  ?,  ?,  ?]");
+        txttargetgenes.setBackground(new java.awt.Color(0, 204, 0));
+        txttargetgenes.setFont(new java.awt.Font("Segoe UI Semilight", 1, 11)); // NOI18N
+        txttargetgenes.setText("Target Genes: [?, ?, ?, ?, ?, ?, ?, ?, ?, ?]");
+
+        txtalienattacks.setEditable(false);
+        txtalienattacks.setBackground(new java.awt.Color(255, 204, 204));
+        txtalienattacks.setFont(new java.awt.Font("Segoe UI Semilight", 1, 10)); // NOI18N
+        txtalienattacks.setText("Attacks Left: ?");
+
+        txtmonsterattacks.setEditable(false);
+        txtmonsterattacks.setBackground(new java.awt.Color(255, 204, 204));
+        txtmonsterattacks.setFont(new java.awt.Font("Segoe UI Semilight", 1, 10)); // NOI18N
+        txtmonsterattacks.setText("Attacks Left: ?");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -367,22 +403,23 @@ public class CivilizationSimulator extends javax.swing.JFrame {
                                 .addGap(74, 74, 74)
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGap(92, 92, 92)
-                                .addComponent(jLabel1)
-                                .addGap(259, 259, 259)
-                                .addComponent(jLabel2))
+                                .addGap(87, 87, 87)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(235, 235, 235)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addGap(98, 98, 98)
-                                .addComponent(btnattackmonster)
-                                .addGap(171, 171, 171)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txttargetgenes)
-                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnhelp)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(btnattackmonster)
+                                            .addComponent(txtmonsterattacks, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(108, 108, 108)
+                                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(77, 77, 77)
-                        .addComponent(btnexit)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnstart)
                         .addGap(175, 175, 175)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -390,13 +427,14 @@ public class CivilizationSimulator extends javax.swing.JFrame {
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(105, 105, 105))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(btnattackalien)
-                            .addComponent(btnhelp))
-                        .addGap(92, 92, 92))))
+                            .addComponent(txtalienattacks, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnexit))
+                        .addGap(92, 92, 92))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(81, 81, 81))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnskip1)
@@ -405,40 +443,48 @@ public class CivilizationSimulator extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(btnskip10)
                 .addGap(230, 230, 230))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(351, 351, 351)
+                .addComponent(txttargetgenes, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(31, 31, 31)
+                .addGap(43, 43, 43)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3))
-                .addGap(30, 30, 30)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane3)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
                     .addComponent(jScrollPane2))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnattackalien)
                             .addComponent(btnattackmonster))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtalienattacks, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtmonsterattacks, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txttargetgenes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(19, 19, 19)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txttargetgenes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnhelp)
+                    .addComponent(btnexit))
+                .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnskip1)
                     .addComponent(btnskip5)
                     .addComponent(btnskip10))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnstart)
-                    .addComponent(btnhelp)
-                    .addComponent(btnexit))
+                .addComponent(btnstart)
                 .addContainerGap())
         );
 
@@ -475,8 +521,11 @@ public class CivilizationSimulator extends javax.swing.JFrame {
         for(Lifeform lf : alist)
             alienlistmodel.addElement(lf);
         //initial log of simulation
-        txtactivity.setText("---Generation 1---\n");
+        txtactivity.setText("----------------Generation 1----------------\n");
         txtactivity.append(isWinning()+" are in the lead!");
+        //update initial number of attacks
+        txtmonsterattacks.setText("Attacks Left: "+attackMonsters);
+        txtalienattacks.setText("Attacks Left: "+attackAliens);
         //enable and disable buttons
         btnstart.setEnabled(false);
         btnskip1.setEnabled(true);
@@ -519,7 +568,7 @@ public class CivilizationSimulator extends javax.swing.JFrame {
             int removeIndex=listmonsters.getSelectedIndex(); //stores index of selected item
             //checks if there is an item
             if(removeIndex==-1){
-                JOptionPane.showMessageDialog(this,"Please select a target to attack.");
+                JOptionPane.showMessageDialog(this,"Please select a monster to attack.");
                 return;
             }
             //removes item from lists
@@ -528,6 +577,7 @@ public class CivilizationSimulator extends javax.swing.JFrame {
             mlist.add(new Monster());
             //decrement attack and update log
             attackMonsters--;
+            txtmonsterattacks.setText("Attacks Left: "+attackMonsters);
             txtactivity.append("\nHumans eliminated "+m.getName()+" #"+m.getId()+"!");
         }
         else JOptionPane.showMessageDialog(this,"You are out of attacks on monsters.");
@@ -539,7 +589,7 @@ public class CivilizationSimulator extends javax.swing.JFrame {
             int removeIndex=listaliens.getSelectedIndex(); //stores index of selected item
             //checks if there is an item
             if(removeIndex==-1){
-                JOptionPane.showMessageDialog(this,"Please select a target to attack.");
+                JOptionPane.showMessageDialog(this,"Please select an alien to attack.");
                 return;
             }
             //removes item from lists
@@ -548,6 +598,7 @@ public class CivilizationSimulator extends javax.swing.JFrame {
             alist.add(new Alien());
             //decrement attack and update log
             attackAliens--;
+            txtalienattacks.setText("Attacks Left: "+attackAliens);
             txtactivity.append("\nHumans eliminated "+a.getName()+" #"+a.getId()+"!");
         }
         else JOptionPane.showMessageDialog(this,"You are out of attacks on aliens.");
@@ -605,6 +656,8 @@ public class CivilizationSimulator extends javax.swing.JFrame {
     private javax.swing.JList<String> listhumans;
     private javax.swing.JList<String> listmonsters;
     private javax.swing.JTextArea txtactivity;
+    private javax.swing.JTextField txtalienattacks;
+    private javax.swing.JTextField txtmonsterattacks;
     private javax.swing.JTextField txttargetgenes;
     // End of variables declaration//GEN-END:variables
 }
