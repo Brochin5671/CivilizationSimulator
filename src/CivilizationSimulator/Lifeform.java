@@ -54,6 +54,12 @@ public abstract class Lifeform implements Comparable<Lifeform>{
     public static double getMutationRate(){
         return MUTATION_RATE;
     }
+    //sets mutation rate to random number if event has not occurred, else reset to 0.3
+    public static void setMutationRate(boolean eventOccurred){
+        if(!eventOccurred)
+            MUTATION_RATE=Math.random();
+        else MUTATION_RATE=0.3;
+    }
     //evaluates lifeform's fitness points by comparing to targetGenes
     private int train(int[] targetGenes){
         int fitness=0;

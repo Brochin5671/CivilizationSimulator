@@ -10,8 +10,9 @@ public class CivilizationSimulator extends javax.swing.JFrame {
     //variables
     private static int[] targetGenes=new int[10];
     private int POPULATION_HSIZE=10,POPULATION_MSIZE=10,POPULATION_ASIZE=10; //population sizes of all lifeforms
-    private int generationNum;
-    private boolean gameOver=false;
+    private int generationNum; //keeps track of generation number
+    private int attackMonsters=3,attackAliens=3; //number of attacks for each population for humans
+    private boolean mutationEvent=false;
     //lists
     DefaultListModel humanlistmodel,monsterlistmodel,alienlistmodel;
     ArrayList<Lifeform> hlist = new ArrayList<Lifeform>();
@@ -31,6 +32,8 @@ public class CivilizationSimulator extends javax.swing.JFrame {
         btnskip1.setEnabled(false);
         btnskip5.setEnabled(false);
         btnskip10.setEnabled(false);
+        btnattackmonster.setEnabled(false);
+        btnattackalien.setEnabled(false);
     }
 
     //creates target genes
@@ -80,29 +83,33 @@ public class CivilizationSimulator extends javax.swing.JFrame {
             /*decreases generations by one so when generations reaches zero it can stop creating new generations
             this is because of how many generations were requested to be skipped by the user*/
             generations--;
-            //updates simulation log
+            //updates simulation generation count
             updateLog();
-            /*checks if there is a winner, and ends simulation
-            if there isn't display who's winning*/
+            //checks if there is a winner, and ends simulation
             if(!isWinner().equals("Nobody")){
                 //display winner
                 txtactivity.append("Congratulations to the "+isWinner()+" on winning\nthe race thanks to "+getWinner(isWinner())+"!");
-                //reset ids and other stats
+                //reset simulation stats to default
                 Human.resetId();
                 Monster.resetId();
                 Alien.resetId();
                 POPULATION_HSIZE=POPULATION_MSIZE=POPULATION_ASIZE=10;
+                attackMonsters=attackAliens=3;
+                mutationEvent=false;
+                Lifeform.setMutationRate(true);
                 //enable and disable buttons to prevent simulation from continuing
-                //btnstart.setText("Restart");
                 btnstart.setEnabled(true);
                 btnskip1.setEnabled(false);
                 btnskip5.setEnabled(false);
                 btnskip10.setEnabled(false);
+                btnattackmonster.setEnabled(false);
+                btnattackalien.setEnabled(false);
                 break;
             }
+            //checks if any actions or abilities are used/occur
             else{
-                checkAttacks();
-                txtactivity.append(isWinning()+" are in the lead!");
+                checkActions();
+                txtactivity.append(isWinning()+" are in the lead!"); //displays who's winning
             }
         }
     }
@@ -111,8 +118,8 @@ public class CivilizationSimulator extends javax.swing.JFrame {
         generationNum++;
         txtactivity.setText("---Generation "+generationNum+"---\n");
     }
-    //checks if any of the populations attack or use an ability
-    public void checkAttacks(){
+    //checks if any of the populations attack or use an ability, or if a mutation event happens
+    public void checkActions(){
         //humans get a recover number, if it does not equal zero they regenerate their population after attack, and update list
         if(Human.recover()){
             int recoverNum=10-POPULATION_HSIZE;
@@ -139,7 +146,7 @@ public class CivilizationSimulator extends javax.swing.JFrame {
             alienlistmodel.clear();
             for(Lifeform lf : alist)
                 alienlistmodel.addElement(lf);
-            txtactivity.append("Aliens decided to increse their population!\n");
+            txtactivity.append("Aliens decided to increase their population!\n");
         }
         //monsters reduce the other population sizes by half
         if(Monster.purge()){
@@ -150,6 +157,21 @@ public class CivilizationSimulator extends javax.swing.JFrame {
             POPULATION_HSIZE/=2;
             POPULATION_ASIZE/=2;
             txtactivity.append("Monsters purged half of each civilization!\n");
+        }
+        //mutation event happens if random number (0-99) is less than 2, affects the chances of a lifeform's child's genes mutating (changing)
+        if(!mutationEvent){ //if mutation event hasn't occurred
+            if((Math.random()*100)<2){
+                Lifeform.setMutationRate(mutationEvent);
+                txtactivity.append("A mutation event has occurred!\nThe mutation rate is now "+String.format("%.2f!\n",Lifeform.getMutationRate()));
+                mutationEvent=true;
+            }
+        }
+        else{ //if mutation event has occurred, revert to normal if random number (0-99) is less than 10
+            if((Math.random()*100)<10){
+                Lifeform.setMutationRate(mutationEvent);
+                txtactivity.append("The mutation event has ended!\nThe mutation rate is now back to "+Lifeform.getMutationRate()+"!\n");
+                mutationEvent=false;
+            }
         }
     }
     /*goes through lists comparing high score to score of each civilization
@@ -218,7 +240,7 @@ public class CivilizationSimulator extends javax.swing.JFrame {
         listhumans = new javax.swing.JList<>();
         jScrollPane3 = new javax.swing.JScrollPane();
         listaliens = new javax.swing.JList<>();
-        jButton1 = new javax.swing.JButton();
+        btnattackmonster = new javax.swing.JButton();
         btnskip1 = new javax.swing.JButton();
         btnskip5 = new javax.swing.JButton();
         btnskip10 = new javax.swing.JButton();
@@ -227,6 +249,7 @@ public class CivilizationSimulator extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         txtactivity = new javax.swing.JTextArea();
         lbltargetgenes = new javax.swing.JLabel();
+        btnattackalien = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAutoRequestFocus(false);
@@ -266,7 +289,13 @@ public class CivilizationSimulator extends javax.swing.JFrame {
         listaliens.setForeground(new java.awt.Color(255, 255, 255));
         jScrollPane3.setViewportView(listaliens);
 
-        jButton1.setText("Attack");
+        btnattackmonster.setFont(new java.awt.Font("Segoe UI Semilight", 1, 12)); // NOI18N
+        btnattackmonster.setText("Attack");
+        btnattackmonster.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnattackmonsterActionPerformed(evt);
+            }
+        });
 
         btnskip1.setFont(new java.awt.Font("Segoe UI Semilight", 1, 12)); // NOI18N
         btnskip1.setText("Skip 1 Generation");
@@ -317,6 +346,14 @@ public class CivilizationSimulator extends javax.swing.JFrame {
         lbltargetgenes.setText("Target Genes: [?,  ?,  ?,  ?,  ?,  ?,  ?,  ?,  ?,  ?]");
         lbltargetgenes.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
+        btnattackalien.setFont(new java.awt.Font("Segoe UI Semilight", 1, 12)); // NOI18N
+        btnattackalien.setText("Attack");
+        btnattackalien.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnattackalienActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -348,11 +385,11 @@ public class CivilizationSimulator extends javax.swing.JFrame {
                                 .addGap(259, 259, 259)
                                 .addComponent(jLabel2))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGap(89, 89, 89)
-                                .addComponent(jButton1)
-                                .addGap(180, 180, 180)
+                                .addGap(98, 98, 98)
+                                .addComponent(btnattackmonster)
+                                .addGap(171, 171, 171)
                                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(77, 77, 77)
                         .addComponent(btnexit)
@@ -367,7 +404,9 @@ public class CivilizationSimulator extends javax.swing.JFrame {
                         .addComponent(jLabel3)
                         .addGap(105, 105, 105))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnhelp)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnattackalien)
+                            .addComponent(btnhelp))
                         .addGap(92, 92, 92))))
         );
         layout.setVerticalGroup(
@@ -385,10 +424,12 @@ public class CivilizationSimulator extends javax.swing.JFrame {
                     .addComponent(jScrollPane2))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnattackalien)
+                            .addComponent(btnattackmonster))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbltargetgenes)
                 .addGap(19, 19, 19)
@@ -444,6 +485,8 @@ public class CivilizationSimulator extends javax.swing.JFrame {
         btnskip1.setEnabled(true);
         btnskip5.setEnabled(true);
         btnskip10.setEnabled(true);
+        btnattackmonster.setEnabled(true);
+        btnattackalien.setEnabled(true);
     }//GEN-LAST:event_btnstartActionPerformed
     //ends program
     private void btnexitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnexitActionPerformed
@@ -453,7 +496,7 @@ public class CivilizationSimulator extends javax.swing.JFrame {
     private void btnhelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnhelpActionPerformed
         JOptionPane.showMessageDialog(this,"The humans are racing towards having the best genes on the planet!\nBut, the aliens and monsters want to beat them to it.");
         JOptionPane.showMessageDialog(this,"Every generation, natural selection occurs and replaces the bad half\nof each population with the best half's children.");
-        JOptionPane.showMessageDialog(this,"You can use the skip buttons to skip a generation, 5 generations,\nor 10 if you want to speed things up.");
+        JOptionPane.showMessageDialog(this,"You can use the skip buttons to skip a generation, 5 generations,\nor 10 if you want to speed things up.\n*It is recommended to skip 1 generation at a time so \nthe simulation log for each generation is shown*");
         JOptionPane.showMessageDialog(this,"You can stagnate your enemies progress with your attack.\nBut watch out, they have abilities!");
         JOptionPane.showMessageDialog(this,"Monsters are able to purge.\nThis ability reduces the size of all other populations by half!");
         JOptionPane.showMessageDialog(this,"But don't worry, you are able to recover from purges.");
@@ -472,6 +515,46 @@ public class CivilizationSimulator extends javax.swing.JFrame {
     private void btnskip10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnskip10ActionPerformed
         createNewGeneration(10);
     }//GEN-LAST:event_btnskip10ActionPerformed
+    //attacks monsters
+    private void btnattackmonsterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnattackmonsterActionPerformed
+        //checks if there are still attacks left, if not, notify user
+        if(attackMonsters!=0){
+            int removeIndex=listmonsters.getSelectedIndex(); //stores index of selected item
+            //checks if there is an item
+            if(removeIndex==-1){
+                JOptionPane.showMessageDialog(this,"Please select a target to attack.");
+                return;
+            }
+            //removes item from lists
+            Lifeform m=mlist.remove(removeIndex);
+            monsterlistmodel.remove(removeIndex);
+            mlist.add(new Monster());
+            //decrement attack and update log
+            attackMonsters--;
+            txtactivity.append("\nHumans eliminated "+m.getName()+" #"+m.getId()+"!");
+        }
+        else JOptionPane.showMessageDialog(this,"You are out of attacks on monsters.");
+    }//GEN-LAST:event_btnattackmonsterActionPerformed
+    //attacks aliens
+    private void btnattackalienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnattackalienActionPerformed
+        //checks if there are still attacks left, if not, notify user
+        if(attackAliens!=0){
+            int removeIndex=listaliens.getSelectedIndex(); //stores index of selected item
+            //checks if there is an item
+            if(removeIndex==-1){
+                JOptionPane.showMessageDialog(this,"Please select a target to attack.");
+                return;
+            }
+            //removes item from lists
+            Lifeform a=alist.remove(removeIndex);
+            alienlistmodel.remove(removeIndex);
+            alist.add(new Alien());
+            //decrement attack and update log
+            attackAliens--;
+            txtactivity.append("\nHumans eliminated "+a.getName()+" #"+a.getId()+"!");
+        }
+        else JOptionPane.showMessageDialog(this,"You are out of attacks on aliens.");
+    }//GEN-LAST:event_btnattackalienActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -506,13 +589,14 @@ public class CivilizationSimulator extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnattackalien;
+    private javax.swing.JButton btnattackmonster;
     private javax.swing.JButton btnexit;
     private javax.swing.JButton btnhelp;
     private javax.swing.JButton btnskip1;
     private javax.swing.JButton btnskip10;
     private javax.swing.JButton btnskip5;
     private javax.swing.JButton btnstart;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
